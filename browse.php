@@ -21,15 +21,15 @@
               <i class="fa fa-search"></i>
             </span>
           </div>
-          <input type="text" class="form-control border-left-0" id="keyword" placeholder="Search for anything">
+          <input type="text" class="form-control border-left-0" name="title" id="keyword" placeholder="Search for anything">
         </div>
       </div>
     </div>
     <div class="col-md-3 pr-0">
       <div class="form-group">
         <label for="cat" class="sr-only">Search within:</label>
-        <select class="form-control" id="cat">
-          <option selected value="all">All categories</option>
+        <select class="form-control" name="category" id="cat">
+          <option selected value="">All categories</option>
           <option value="health">Health & Beauty</option>
           <option value="home">Home & Garden</option>
           <option value="business">Business & Industrial</option>
@@ -43,7 +43,7 @@
     <div class="col-md-3 pr-0">
       <div class="form-inline">
         <label class="mx-2" for="order_by">Sort by:</label>
-        <select class="form-control" id="order_by">
+        <select class="form-control" name="order" id="order_by">
           <option selected value="pricelow">Price (low to high)</option>
           <option value="pricehigh">Price (high to low)</option>
           <option value="date">Soonest expiry</option>
@@ -62,25 +62,33 @@
 
 <?php
   // Retrieve these from the URL
-  if (!isset($_GET['keyword'])) {
+  if (isset($_GET['keyword'])) {
     // TODO: Define behavior if a keyword has not been specified.
   }
   else {
-    $keyword = $_GET['keyword'];
+    $keyword = $_GET['title'];
   }
 
-  if (!isset($_GET['cat'])) {
+  if (isset($_GET['cat'])) {
     // TODO: Define behavior if a category has not been specified.
   }
   else {
-    $category = $_GET['cat'];
+    $category = $_GET['category'];
   }
   
-  if (!isset($_GET['order_by'])) {
+  if (isset($_GET['order_by'])) {
     // TODO: Define behavior if an order_by value has not been specified.
   }
   else {
-    $ordering = $_GET['order_by'];
+    $get_order = $_GET['order'];
+    
+    if ($get_order === 'pricelow'){
+      $order = "startingPrice ASC";
+    }elseif ($get_order === 'pricehigh'){
+      $order = "startingPrice DESC";;
+    }else {
+      $order = "endDate";
+    }
   }
   
   if (!isset($_GET['page'])) {
@@ -114,7 +122,7 @@
   // Demonstration of what listings will look like using dummy data.
 
 require_once "database.php";
-$readSql = "SELECT * FROM Auction";
+$readSql = "SELECT * FROM Auction WHERE title LIKE '%$keyword%' AND category LIKE '%$category%' ORDER BY $order";
 
 $result = mysqli_query($conn, $readSql);
 
