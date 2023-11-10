@@ -87,6 +87,7 @@ if (isset($_POST["submit"])) {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
+            $mail->isHTML(true);
             $mail->Username = 'cmcjas1994@gmail.com';
             $mail->Password = 'yswn rjrc reny gzfw';
             $mail->SMTPSecure = 'ssl';
@@ -101,13 +102,15 @@ if (isset($_POST["submit"])) {
                 $row = mysqli_fetch_assoc($result)['email'];
                 $mail->addAddress("$row");
             }
+
+            $pound = '<h7>&pound</h7>';
             
             $mail->Subject = 'Bid Notification From E-Auction!';
 
             if (($rowC == $userName) or ($result != null)) {
-                $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of chr(163)$bid.";
+                $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
             }else{
-                $mail->Body = "Your bid item - '$row_title' (seller - '$row_seller') has been outbid by $userName for chr(163)$bid.";
+                $mail->Body = "Your bid item - '$row_title' (seller - '$row_seller') has been outbid by $userName for $pound$bid.";
             }
             
             $mail->send();
