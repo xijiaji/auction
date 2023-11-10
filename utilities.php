@@ -54,12 +54,51 @@ function print_listing_li($auction_id, $title, $cond, $desc, $price, $num_bids, 
   // Print HTML
   echo('
     <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $auction_id . '">' . $title . '</a></h5> <h6>' . $cond. '</h6> ' . $desc_shortened . '</div>
+    <div class="p-2 mr-5"><h5><a href="listing.php?auction_id=' . $auction_id . '">' . $title . '</a></h5> <h6>' . $cond. '</h6> ' . $desc_shortened . '</div>
     <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $num_bids . $bid . '<br/>' . $time_remaining . '</div>
   </li>'
   );
 }
 
+function print_bid_li($auction_id, $title, $cond, $desc, $price, $status)
+{
+  // Truncate long descriptions
+  if (strlen($desc) > 250) {
+    $desc_shortened = substr($desc, 0, 250) . '...';
+  }
+  else {
+    $desc_shortened = $desc;
+  }
+  
+
+  // Print HTML
+  echo('
+    <li class="list-group-item d-flex justify-content-between">
+    <div class="p-2 mr-5"><h5><a href="listing.php?auction_id=' . $auction_id . '">' . $title . '</a></h5> <h6>' . $cond. '</h6> ' . $desc_shortened . '</div>
+    <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $status . '</div>
+  </li>'
+  );
+}
+
+function print_itembid_li($name, $title, $cond, $desc, $price, $dtime)
+{
+  // Truncate long descriptions
+  if (strlen($desc) > 250) {
+    $desc_shortened = substr($desc, 0, 250) . '...';
+  }
+  else {
+    $desc_shortened = $desc;
+  }
+  
+
+  // Print HTML
+  echo('
+    <li class="list-group-item d-flex justify-content-between">
+    <div class="p-2 mr-5"><h7>Bidder: ' . $name . '</h7><h5>'. $title . '</a></h5> <h6>' . $cond. '</h6> ' . $desc_shortened . '</div>
+    <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>'. $dtime .'</div>
+  </li>'
+  );
+}
 
 
 ?>

@@ -104,7 +104,11 @@
   
   /* For the purposes of pagination, it would also be helpful to know the
      total number of results that satisfy the above query */
-  $num_results = 96; // TODO: Calculate me for real
+  require_once "database.php";
+  $readSql = "SELECT * FROM Auction";
+  $result = mysqli_query($conn, $readSql);
+
+  $num_results = mysqli_num_rows($result);
   $results_per_page = 10;
   $max_page = ceil($num_results / $results_per_page);
 ?>
@@ -128,7 +132,7 @@ $result = mysqli_query($conn, $readSql);
 
 if ($result != null) {
 
-    while($row = mysqli_fetch_assoc($result)) {
+  while($row = mysqli_fetch_assoc($result)) {
       $auction_id = "$row[auctionID]";
       $title = "$row[title]";
       $condition = "$row[itemCondition]";
@@ -139,7 +143,10 @@ if ($result != null) {
       
       // This uses a function defined in utilities.php
       print_listing_li($auction_id, $title, $condition, $description, $current_price, $num_bids, $end_date);
-    }
+  }
+}
+else {
+  echo '<div class="col-md-3 pr-0"><h6>Empty Auction At The Moment :)</h6></div>';
 }
 
 ?>

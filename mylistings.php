@@ -19,6 +19,10 @@
   
   // TODO: Loop through results and print them out as list items.
 
+if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 'seller') {
+  header('Location: browse.php');
+}
+
 session_start();
 $userName = $_SESSION['username']; 
 

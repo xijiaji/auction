@@ -71,11 +71,11 @@ if (isset($_POST["submit"])) {
         exit();
     }else{
         $sqlA = "INSERT INTO Auction (title, itemCondition, description, category, startDate, startingPrice, reservePrice, 
-        endDate, noBid, auctionStatus, sellerName) VALUES ('$title', '$condition','$description', '$category', '$currentdate', 
-        '$startprice', '$reserveprice', '$enddateSQL', '0', 'Opened', '$userName')";
+        endDate, noBid, winner, sellerName) VALUES ('$title', '$condition','$description', '$category', '$currentdate', 
+        '$startprice', '$reserveprice', '$enddateSQL', '1', 'None', '$userName')";
 
         if ($conn->query($sqlA) === TRUE) {
-            echo('<div class="text-center">Auction successfully created! <a href="FIXME">View your new listing.</a></div>');
+            echo('<div class="alert alert-success">Auction successfully created! <a href="FIXME">View your new listing.</a></div>');
             header("refresh:5;url=browse.php");
             exit();
         }else{

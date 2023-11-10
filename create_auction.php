@@ -11,7 +11,7 @@
   foreach ($_SESSION["messages"] as $msg) {
     echo $msg;
   }
-  $_SESSION["messages"]="";
+  $_SESSION["messages"]=""; # reset messages
 
 ?>
 
