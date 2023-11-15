@@ -1,4 +1,6 @@
 <?php
+# make directory for img files
+mkdir("img");
 
 require_once "database.php";
 
