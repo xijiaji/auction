@@ -75,11 +75,11 @@ if (isset($_POST["submit"])) {
 
             # check outbid conditions and send emails accordingly when called
             $sqlC = "SELECT buyerName FROM Bid WHERE price = (SELECT max(price) FROM Bid WHERE price < (SELECT max(price) FROM Bid WHERE auctionID = '$id'))";
-            
-            if (($conn->query($sqlC) == TRUE)) {
-                $resultC = mysqli_query($conn, $sqlC);
+            $resultC = mysqli_query($conn, $sqlC);
+            $count = mysqli_num_rows($resultC);
+            # check if bid data exist in the first place - exception handling
+            if ($count > 0) {
                 $rowC = mysqli_fetch_assoc($resultC)['buyerName'];
-
                 # email for the last highest bidder
                 $sqlD = "SELECT email FROM User WHERE name = '$rowC'";
                 $resultD = mysqli_query($conn, $sqlD);
@@ -87,7 +87,6 @@ if (isset($_POST["submit"])) {
             } else{
                 $resultC = null;
             }
-
 
             $sqlI = "SELECT * FROM Auction WHERE auctionID = '$id'";
             $resultI = mysqli_query($conn, $sqlI);
@@ -110,17 +109,25 @@ if (isset($_POST["submit"])) {
             $pound = '<h7>&pound</h7>';
             $mail->Subject = 'Bid Notification From E-Auction!';
 
-            if ($rowC != $userName){
-                # create an outbid warning msg to the last highest bidder
-                $mail->Body = "Your bid item - '$title' (seller - '$seller') has been outbid by $userName for $pound$bid.";
-                $mail->send();
-                $mail->clearAddresses();
-                # also create a generic bid msg to the current user
-                $mail->addAddress("$row");
-                $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
-                $mail->send();
-                $mail->clearAddresses();
+            if ($rowC !== $userName){
+                if ($resultC === null){
+                    # generic msg when first time created a bid - exception handling
+                    $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
+                    $mail->send();
+                    $mail->clearAddresses();
+                }else{
+                    # create an outbid warning msg to the last highest bidder
+                    $mail->Body = "Your bid item - '$title' (seller - '$seller') has been outbid by $userName for $pound$bid.";
+                    $mail->send();
+                    $mail->clearAddresses();
+                    # also create a generic bid msg to the current user
+                    $mail->addAddress("$row");
+                    $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
+                    $mail->send();
+                    $mail->clearAddresses();
+                }
             }else{
+                # send msg when user created a newer bid upon previous bids
                 $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
                 $mail->send();
                 $mail->clearAddresses();
