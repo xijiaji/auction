@@ -1,4 +1,5 @@
-<?php include_once("header.php")?>
+<?php include_once("header.php");
+?>
 
 <div class="container my-5">
 
@@ -36,13 +37,43 @@ if (isset($_POST["submit"])) {
     $reserveprice = $_POST["reserveprice"];
     $enddate = $_POST["enddate"];
 
-    
+    # variables for our upload img files
+    $fileName = $_FILES['imgfile']['name'];
+    $fileTmp = $_FILES['imgfile']['tmp_name'];
+    $fileSize = $_FILES['imgfile']['size'];
+    $fileError = $_FILES['imgfile']['error'];
+    $fileType = $_FILES['imgfile']['type'];
+
     $currentdate = date('Y-m-d H:i:s', $phptime);
     $enddateSQL = date("Y-m-d H:i:s",strtotime($enddate));
     $errors = array();
     $msgs = array();
 
-    if (empty($title) OR empty($description) OR empty($category) OR empty($startprice) OR empty($reserveprice)
+    $nameExt = explode('.', $fileName);  # extract filename format xxx.ext
+    $actExt = strtolower(end($nameExt)); # extract the end of the filename ie. the extension name
+    $extAllowed = array('jpg', 'jpeg');  # allow only jpg and jpeg format images
+
+    if (in_array($actExt, $extAllowed)) {
+        if ($fileError === 0) {
+            # ensure image file size is less than 5mb
+            if ($fileSize < 5000000) {
+                # ensure we have a unique filename and save it onto a local path
+                $fileNameUni = uniqid('', true).".".$actExt;
+                $fileDest = '/var/www/auction/img/'.$fileNameUni;
+                move_uploaded_file($fileTmp, $fileDest);
+            }else {
+                array_push($errors, "File size exceeded (must be less than 5mb)!");
+            }
+        }else {
+            echo "<div class='alert alert-danger'>Something went wrong :( Redirect in 5 secs.</div>";
+            header("refresh:5;url=browse.php");
+            exit();
+        }
+    } else {
+        array_push($errors, "File format not accepted!");
+    }
+
+    if (empty($title) OR empty($description) OR empty($category) OR empty($startprice) OR empty($reserveprice) OR empty($fileName)
     OR empty($enddate) OR ($category === 'none') OR ($condition === 'none')){
         header("Location: create_auction.php");
         exit();  
@@ -71,11 +102,12 @@ if (isset($_POST["submit"])) {
         exit();
     }else{
         $sqlA = "INSERT INTO Auction (title, itemCondition, description, category, startDate, startingPrice, reservePrice, 
-        endDate, noBid, winner, sellerName) VALUES ('$title', '$condition','$description', '$category', '$currentdate', 
-        '$startprice', '$reserveprice', '$enddateSQL', '1', 'None', '$userName')";
+        endDate, mailSent, noBid, winner, imgFileName, sellerName) VALUES ('$title', '$condition','$description', '$category', '$currentdate', 
+        '$startprice', '$reserveprice', '$enddateSQL', 'FALSE', '1', 'None', '$fileNameUni', '$userName')";
 
         if ($conn->query($sqlA) === TRUE) {
-            echo('<div class="alert alert-success">Auction successfully created! <a href="FIXME">View your new listing.</a></div>');
+            echo('<div class="alert alert-success">Auction successfully created! <a href="mylistings.php">View your 
+            new listing.</a></div>');
             header("refresh:5;url=browse.php");
             exit();
         }else{

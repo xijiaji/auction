@@ -1,4 +1,5 @@
-<?php include_once("header.php")?>
+<?php include_once("header.php");
+?>
 
 <?php
 # Access PHPMailer server for handling email functionalities
@@ -8,6 +9,20 @@ use PHPMailer\PHPMailer\Exception;
 require '/usr/share/php/libphp-phpmailer/src/PHPMailer.php';
 require '/usr/share/php/libphp-phpmailer/src/Exception.php';
 require '/usr/share/php/libphp-phpmailer/src/SMTP.php';
+
+# Setup send email variables 
+$mail = new PHPMailer(true);
+            
+$mail->isSMTP();
+$mail->Host = 'smtp.gmail.com';
+$mail->SMTPAuth = true;
+$mail->isHTML(true);
+$mail->Username = 'cmcjas1994@gmail.com';
+$mail->Password = 'yswn rjrc reny gzfw';
+$mail->SMTPSecure = 'ssl';
+$mail->Port = 465;
+            
+$mail->setFrom('cmcjas1994@gmail.com');
 
 // TODO: Extract $_POST variables, check they're OK, and attempt to make a bid.
 // Notify user of success/failure and redirect/give navigation options.
@@ -60,13 +75,13 @@ if (isset($_POST["submit"])) {
         if (($conn->query($sql) === TRUE) AND ($conn->query($sql2) === TRUE)) {
 
             # check outbid conditions and send emails accordingly when called
-            $sqlC = "SELECT buyerName FROM Bid WHERE price = (SELECT max(price) FROM Bid WHERE price < (SELECT max(price)
-            FROM Bid WHERE auctionID = '$id'))";
+            $sqlC = "SELECT buyerName FROM Bid WHERE price = (SELECT max(price) FROM Bid WHERE price < (SELECT max(price) FROM Bid WHERE auctionID = '$id'))";
             
-            if (($conn->query($sqlC) === TRUE)) {
-                $resultC = $mysqli_query($conn, $sqlC);
+            if (($conn->query($sqlC) == TRUE)) {
+                $resultC = mysqli_query($conn, $sqlC);
                 $rowC = mysqli_fetch_assoc($resultC)['buyerName'];
 
+                # email for the last highest bidder
                 $sqlD = "SELECT email FROM User WHERE name = '$rowC'";
                 $resultD = mysqli_query($conn, $sqlD);
                 $rowD = mysqli_fetch_assoc($resultD)['email'];
@@ -81,41 +96,38 @@ if (isset($_POST["submit"])) {
             $title = "$rowI[title]";
             $seller = "$rowI[sellerName]";
 
-            # Setup send email variables 
-            $mail = new PHPMailer(true);
-            
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->isHTML(true);
-            $mail->Username = 'cmcjas1994@gmail.com';
-            $mail->Password = 'yswn rjrc reny gzfw';
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port = 465;
-            
-            $mail->setFrom('cmcjas1994@gmail.com');
-            if ($result != null){
+            # email for current user
+            $sql = "SELECT email FROM User WHERE name = '$userName'";
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result)['email'];
+
+            # if bid exists, inform previous highest bidder that he/she's been outbid, otherwise create a generic bid email msg
+            if ($resultC != null){
                 $mail->addAddress("$rowD");
             } else{
-                $sql = "SELECT email FROM User WHERE name = '$userName'";
-                $result = mysqli_query($conn, $sql);
-                $row = mysqli_fetch_assoc($result)['email'];
                 $mail->addAddress("$row");
             }
 
             $pound = '<h7>&pound</h7>';
-            
             $mail->Subject = 'Bid Notification From E-Auction!';
 
-            if (($rowC == $userName) or ($result != null)) {
+            if ($rowC != $userName){
+                # create an outbid warning msg to the last highest bidder
+                $mail->Body = "Your bid item - '$title' (seller - '$seller') has been outbid by $userName for $pound$bid.";
+                $mail->send();
+                $mail->clearAddresses();
+                # also create a generic bid msg to the current user
+                $mail->addAddress("$row");
                 $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
+                $mail->send();
+                $mail->clearAddresses();
             }else{
-                $mail->Body = "Your bid item - '$row_title' (seller - '$row_seller') has been outbid by $userName for $pound$bid.";
+                $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
+                $mail->send();
+                $mail->clearAddresses();
             }
-            
-            $mail->send();
 
-            echo('<div class="alert alert-success">Bid successfully submitted! Redirect in 5 secs.</a></div>');
+            echo('<div class="alert alert-success">Bid successfully created! Redirect in 5 secs.</a></div>');
             header("refresh:5;url=browse.php");
             exit();
         }else{
@@ -126,8 +138,6 @@ if (isset($_POST["submit"])) {
             $conn->close();
     }
 }
-
-
 
 ?>
 

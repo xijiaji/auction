@@ -1,5 +1,7 @@
-<?php include_once("header.php")?>
-<?php require("utilities.php")?>
+<?php include_once("header.php");
+  require("utilities.php");
+  include("winner_script.php");
+?>
 
 <?php
   session_start();
@@ -12,9 +14,12 @@
   // Get info from the URL:
   $auction_id = $_GET['auction_id'];
   $_SESSION['auction_id'] = $auction_id;
-  // TODO: Use item_id to make a query to the database.
+  $userName = $_SESSION['username'];
+
 
   require_once "database.php";
+  // TODO: Use item_id to make a query to the database.
+
   $sql = "SELECT * FROM Auction WHERE auctionID = '$auction_id'";
   $sql2 = "SELECT buyerName FROM Bid WHERE auctionID = '$auction_id' AND price = (SELECT MAX(price) FROM Bid WHERE 
   auctionID = '$auction_id')";
@@ -33,6 +38,7 @@
   $num_bids = $row['noBid'];
   $end_time = new DateTime($row['endDate']);
   $seller = "$row[sellerName]";
+  $imgName = "$row[imgFileName]";
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
@@ -59,6 +65,7 @@
 <div class="row"> <!-- Row #1 with auction title + watch button -->
   <div class="col-sm-8"> <!-- Left col -->
     <h2 class="my-3"><?php echo($title); ?></h2>
+    <?php echo '<div class="p-2 mr-5"><img src="img/'.$imgName.'" width="150px" height="150px"></div>'?>
   </div>
   <div class="col-sm-4 align-self-center"> <!-- Right col -->
 <?php
@@ -96,13 +103,21 @@
 <?php if ($now > $end_time): ?>
      This auction ended <?php echo(date_format($end_time, 'j M H:i')) ?>
      <!-- TODO: Print the result of the auction here? -->
+     <?php 
+      $sql = "SELECT winner FROM Auction WHERE auctionID = '$auction_id'";
+      $result = mysqli_query($conn, $sql);
+      $winner = mysqli_fetch_assoc($result)['winner'];
+
+      echo ('<h4>"' .$winner. '" won this auction.</h4>');
+     ?>
+
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p> 
     <p class="lead">Number of bid: <?php echo(number_format($num_bids)) ?></p> 
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 <?php endif ?>
 
-<?php if (isset($_SESSION['logged_in']) && $_SESSION['account_type'] == 'buyer'): ?>
+<?php if (($now < $end_time) AND (isset($_SESSION['logged_in']) && $_SESSION['account_type'] == 'buyer')): ?>
     <!-- Bidding form -->
     <form method="POST" action="place_bid.php">
       <div class="input-group">

@@ -1,4 +1,6 @@
-<?php include_once("header.php")?>
+<?php include_once("header.php");
+include("winner_script.php");
+?>
 
 <?php
 // (Uncomment this block to redirect people without selling privileges away from this page)
@@ -29,7 +31,7 @@
       before they try to send it, but that kind of functionality should be
       extremely low-priority / only done after all database functions are
       complete. -->
-      <form method="post" action="create_auction_result.php">
+      <form method="post" action="create_auction_result.php" enctype="multipart/form-data">
         <div class="form-group row">
           <label for="auctionTitle" class="col-sm-2 col-form-label text-right">Title of auction</label>
           <div class="col-sm-10">
@@ -41,7 +43,8 @@
           <label for="auctionDetails" class="col-sm-2 col-form-label text-right">Details</label>
           <div class="col-sm-10">
             <textarea class="form-control" name="description" id="auctionDetails" rows="4"></textarea>
-            <small id="detailsHelp" class="form-text text-muted">Full details of the listing to help bidders decide if it's what they're looking for.</small>
+            <small id="detailsHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Full details of the listing to help bidders 
+            decide if it's what they're looking for.</small>
           </div>
         </div>
         <div class="form-group row">
@@ -72,6 +75,14 @@
             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
           </div>
         </div>
+    
+        <div class="form-group row">
+          <div class="col-sm-10">
+          <small class="form-text text-muted"><span class="text-danger">* Required.</span> Please upload an image for the auction item.</small>
+            <input type="file" id="myFile" name="imgfile" accept="image/*">
+          </div>
+        </div>
+
         <div class="form-group row">
           <label for="auctionStartPrice" class="col-sm-2 col-form-label text-right">Starting price</label>
           <div class="col-sm-10">

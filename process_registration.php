@@ -1,4 +1,5 @@
-<?php include_once("header.php")?>
+<?php include_once("header.php");
+?>
 <?php
 
 // TODO: Extract $_POST variables, check they're OK, and attempt to create

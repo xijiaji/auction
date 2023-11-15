@@ -1,6 +1,7 @@
-<?php include_once("header.php")?>
-<?php require("utilities.php")?>
-
+<?php include_once("header.php");
+  require("utilities.php");
+  include("winner_script.php");
+?>
 
 <div class="container">
 
@@ -105,12 +106,21 @@
   /* For the purposes of pagination, it would also be helpful to know the
      total number of results that satisfy the above query */
   require_once "database.php";
+  # page display logic
   $readSql = "SELECT * FROM Auction";
   $result = mysqli_query($conn, $readSql);
 
   $num_results = mysqli_num_rows($result);
   $results_per_page = 10;
   $max_page = ceil($num_results / $results_per_page);
+
+  $page = $_GET["page"];
+
+  if ($page=='' || $page=='1'){
+    $p=0;
+  }else{
+    $p=$page*10 - 10;
+  }
 ?>
 
 <div class="container mt-5">
@@ -124,29 +134,28 @@
 
 <?php
   // Demonstration of what listings will look like using dummy data.
-
-require_once "database.php";
-$readSql = "SELECT * FROM Auction WHERE title LIKE '%$keyword%' AND category LIKE '%$category%' ORDER BY $order";
+$readSql = "SELECT * FROM Auction WHERE title LIKE '%$keyword%' AND category LIKE '%$category%' ORDER BY $order LIMIT $p,10";
 
 $result = mysqli_query($conn, $readSql);
 
-if ($result != null) {
-
+# display msg if no auctions created yet, otherwise display list
+if (mysqli_num_rows($result) == 0){
+  echo "<h4>No auction(s) created yet :)</h4>";
+}else{
   while($row = mysqli_fetch_assoc($result)) {
-      $auction_id = "$row[auctionID]";
-      $title = "$row[title]";
-      $condition = "$row[itemCondition]";
-      $description = "$row[description]";
-      $current_price = $row['startingPrice'];
-      $num_bids = $row['noBid'];
-      $end_date = new DateTime($row['endDate']);
-      
-      // This uses a function defined in utilities.php
-      print_listing_li($auction_id, $title, $condition, $description, $current_price, $num_bids, $end_date);
+    $auction_id = "$row[auctionID]";
+    $title = "$row[title]";
+    $condition = "$row[itemCondition]";
+    $description = "$row[description]";
+    $current_price = $row['startingPrice'];
+    $num_bids = $row['noBid'];
+    $end_date = new DateTime($row['endDate']);
+    $imgName = "$row[imgFileName]";
+    
+    // This uses a function defined in utilities.php
+    print_listing_li($auction_id, $title, $condition, $description, $current_price, $num_bids, $end_date, $imgName);
   }
-}
-else {
-  echo '<div class="col-md-3 pr-0"><h6>Empty Auction At The Moment :)</h6></div>';
+
 }
 
 ?>
