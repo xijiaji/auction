@@ -42,7 +42,6 @@ $rowB = mysqli_fetch_assoc($resultB);
 $priceB = $rowB['startingPrice'];
 
 
-
 if (isset($_POST["submit"])) {
     $bid = $_POST["bid"];
     $errors = array();
