@@ -4,7 +4,6 @@
   include_once("header.php");
   include("winner_script.php");
 
-
   session_start();
   if (!isset($_SESSION['logged_in'])) {
     header("Location: register.php");
@@ -15,5 +14,5 @@
 
 
   
-  
+  include_once("header.php");
 ?>

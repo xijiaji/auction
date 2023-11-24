@@ -20,19 +20,22 @@
   <!-- Custom CSS file -->
   <link rel="stylesheet" href="css/custom.css">
 
-  <title>E-Auction</title>
+  <title>TSport-Auction</title>
+
 </head>
 
-
+<img src="img/tennis-ball-and-racket-icon-logo-design-template-vector.jpg" width="50px" height="50px" align="left">
 <body>
-
 <!-- Navbars -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
-  <a class="navbar-brand" href="#">E-Auction</a>
-  <?php echo $_SESSION['username']; ?>
+  <a class="navbar-brand" href="index.php"><h5>TSPORT-Auction</h5></a>
+  <?php 
+  if ($_SESSION['logged_in']){
+    echo("<h6>Welcome back: $_SESSION[username]</h6>"); 
+  }
+  ?>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-    
 <?php
   // Displays either login or logout on the right, depending on user's
   // current status (session).
@@ -47,6 +50,11 @@
     </li>
   </ul>
 </nav>
+
+<img src="img/page_background.jpg" width="50%" height="400px" align="left">
+<img src="img/816149.jpg" width="50%" height="400px" align="right">
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <ul class="navbar-nav align-middle">
 	<li class="nav-item mx-1">

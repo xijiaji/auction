@@ -1,9 +1,5 @@
 <?php
-# make directory for img files
-mkdir("img");
-
-require_once "database.php";
-
+mkdir("itemimg");
 # Access PHPMailer server for handling email functionalities
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -27,6 +23,7 @@ $mail->Port = 465;
 $mail->setFrom('cmcjas1994@gmail.com');
 
 # check who won after an auction ended
+require_once ("database.php");
 $now = new DateTime();
 $sqli = "SELECT * FROM Auction";
 $result = mysqli_query($conn, $sqli);
@@ -36,56 +33,64 @@ if ($result != null) {
       $endDate = new DateTime($row['endDate']);
       $auction_id = "$row[auctionID]";
 
+
       if ($now > $endDate) {
         $sent = "$row[mailSent]";
         $title = "$row[title]";
-        $seller = "$row[sellerName]";
+        $sellerID = "$row[sellerID]";
 
-        $sqle = "SELECT email FROM User WHERE name = '$seller'";
+        $sqln = "SELECT userName FROM User WHERE id = '$sellerID'";
+        $result = mysqli_query($conn, $sqln);
+        $seller = mysqli_fetch_assoc($result)['userName'];
+
+        $sqle = "SELECT email FROM User WHERE userName = '$seller'";
         $resulte = mysqli_query($conn, $sqle);
         $rowe = mysqli_fetch_assoc($resulte)['email'];
 
-        $sqlii = "SELECT buyerName FROM Bid WHERE auctionID = '$auction_id' AND price = (SELECT MAX(price) FROM Bid WHERE 
+        $sqlii = "SELECT buyerID FROM Bid WHERE auctionID = '$auction_id' AND price = (SELECT MAX(price) FROM Bid WHERE 
         auctionID = '$auction_id')";
-        $sqlA = "SELECT DISTINCT buyerName FROM Bid WHERE auctionID = '$auction_id'";
+        $sqlA = "SELECT DISTINCT buyerID FROM Bid WHERE auctionID = '$auction_id'";
 
         if (($conn->query($sqlii) == TRUE) AND ($conn->query($sqlA) == TRUE)) {
           $resulti = mysqli_query($conn, $sqlii);
           $resultA = mysqli_query($conn, $sqlA);
 
-          $winner = mysqli_fetch_assoc($resulti)['buyerName'];
-          $sqlu = "UPDATE Auction SET winner = '$winner' WHERE auctionID = '$auction_id'";
+          $winnerID = mysqli_fetch_assoc($resulti)['buyerID'];
+          $sqln = "SELECT userName FROM User WHERE id = '$winnerID'";
+          $result = mysqli_query($conn, $sqln);
+          $winner = mysqli_fetch_assoc($result)['userName'];
+
+          $sqlu = "UPDATE Auction SET winnerID = '$winnerID' WHERE auctionID = '$auction_id'";
           mysqli_query($conn, $sqlu);
 
           while ($rowA = mysqli_fetch_assoc($resultA)){
-            $buyer = "$rowA[buyerName]";
-
-            $sqlB = "SELECT email FROM User WHERE name = '$buyer'";
+            $buyerID = "$rowA[buyerID]";
+            $sqln = "SELECT userName FROM User WHERE id = '$buyerID'";
+            $result = mysqli_query($conn, $sqln);
+            $buyer = mysqli_fetch_assoc($result)['userName'];
+            
+            $sqlB = "SELECT email FROM User WHERE userName = '$buyer'";
             $resultB = mysqli_query($conn, $sqlB);
             $rowB = mysqli_fetch_assoc($resultB)['email'];
 
-
-            // echo $rowB;
-            // echo $rowI;
-
-             # emails only send once after an auction is ended, update database from false to true for mailSent
+            # emails only send once after an auction is ended, update database from false to true for mailSent
             if ($sent == 'FALSE'){
 
                 if ($winner == $buyer) {
                   $mail->addAddress("$rowB");
-                  $mail->Subject = 'An auction has ended From E-Auction!';
+                  $mail->Subject = 'An auction has ended from TSPORT-Auction!';
                   $mail->Body = "Your bid item - '$title' (seller - '$seller') has ended, and you've won.";
                   $mail->send();
                   $mail->clearAddresses();
                 } else{
                   $mail->addAddress("$rowB");
-                  $mail->Subject = 'An auction has ended From E-Auction!';
+                  $mail->Subject = 'An auction has ended from TSPORT-Auction!';
                   $mail->Body = "Your bid item - '$title' (seller - '$seller') has ended, $winner won the auction.";
                   $mail->send();
                   $mail->clearAddresses();
                 }
                 $mail->addAddress("$rowe");
-                $mail->Subject = 'Your auction has ended From E-Auction!';
+                $mail->Subject = 'Your auction has ended from TSPORT-Auction!';
                 $mail->Body = "Your auction item - '$title' has ended, '$winner' won the auction.";
                 $mail->send();
                 $mail->clearAddresses();
@@ -98,9 +103,5 @@ if ($result != null) {
          }
       }
   }
-
-
-
-
 
 ?>

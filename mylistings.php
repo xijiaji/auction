@@ -26,11 +26,12 @@ if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 'seller') 
 }
 
 session_start();
-$userName = $_SESSION['username']; 
+$username = $_SESSION['username']; 
 
 # page display logic
 require_once "database.php";
-$readSql = "SELECT * FROM Auction WHERE sellerName = '$userName'";
+$sellerid = extract_userID($username);
+$readSql = "SELECT * FROM Auction WHERE sellerID = '$sellerid'";
 $result = mysqli_query($conn, $readSql);
 
 $num_results = mysqli_num_rows($result);
@@ -46,7 +47,7 @@ if ($page=='' || $page=='1'){
 }
 
 
-$readSql = "SELECT * FROM Auction WHERE sellerName = '$userName' LIMIT $p,10";
+$readSql = "SELECT * FROM Auction WHERE sellerID = '$sellerid' LIMIT $p,10";
 
 $result = mysqli_query($conn, $readSql);
 
@@ -57,8 +58,8 @@ if ($result != null) {
       $title = "$row[title]";
       $condition = "$row[itemCondition]";
       $description = "$row[description]";
-      $current_price = $row['startingPrice'];
-      $num_bids = $row['noBid'];
+      $current_price = $row['winningPrice'];
+      $num_bids = $row['numBid'];
       $end_date = new DateTime($row['endDate']);
       $imgName = "$row[imgFileName]";
       

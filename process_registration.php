@@ -9,6 +9,10 @@
 if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $username = $_POST["username"];
+    $firstname = $_POST["firstname"];
+    $lastname = $_POST["lastname"];
+    $address = $_POST["address"];
+    $phone = $_POST["phone"];
     $password = $_POST["password"];
     $passwordConf = $_POST["passwordconf"];
 
@@ -18,7 +22,7 @@ if (isset($_POST["submit"])) {
     $errors = array();
     $msgs = array();
 
-    if (empty($email) OR empty($password) OR empty($passwordConf)) {
+    if (empty($email) OR empty($password) OR empty($passwordConf) OR empty($firstname) OR empty($lastname) OR empty($phone) OR empty($address)) {
         header("Location: http://localhost/register.php");
         exit();  
     }
@@ -31,11 +35,14 @@ if (isset($_POST["submit"])) {
     if ($password !== $passwordConf) {
         array_push($errors, "Password does not match!");
     }
+    if ((is_numeric($phone) != 1) OR (strlen($phone)<11)) {
+        array_push($errors, "Phone number must be numeric and 11 characters long!");
+    }
 
 
     require_once "database.php";
     $sql = "SELECT * FROM User WHERE email = '$email'";
-    $sql2 = "SELECT * FROM User WHERE name = '$username'";
+    $sql2 = "SELECT * FROM User WHERE userName = '$username'";
 
     $result = mysqli_query($conn, $sql);
     $result2 = mysqli_query($conn, $sql2);
@@ -55,7 +62,8 @@ if (isset($_POST["submit"])) {
         header("Location: register.php");
         exit();
     }else{
-        $sql = "INSERT INTO User (type, email, name, password) VALUES ('$accountType', '$email', '$username', '$passwordHash')";
+        $sql = "INSERT INTO User (type, email, userName, firstName, lastName, password, phone, shippingAddress) VALUES 
+        ('$accountType', '$email', '$username', '$firstname', '$lastname', '$passwordHash', '$phone', '$address')";
         if ($conn->query($sql) === TRUE) {
             echo "<div class='alert alert-success'>Registered successfully! Redirect in 5 secs.</div>";
             header("refresh:5;url=register.php");
@@ -67,8 +75,6 @@ if (isset($_POST["submit"])) {
         }
         $conn->close();      
         }
-
-}
-
+    }
 ?>
 <?php include_once("footer.php")?>

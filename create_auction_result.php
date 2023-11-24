@@ -1,4 +1,5 @@
 <?php include_once("header.php");
+require("utilities.php");
 ?>
 
 <div class="container my-5">
@@ -25,8 +26,9 @@
 // If all is successful, let user know.
 
 session_start();
-$userName = $_SESSION['username'];
-
+require_once "database.php";
+$username = $_SESSION['username'];
+$sellerID = extract_userID($username);
 
 if (isset($_POST["submit"])) {
     $title = $_POST["title"];
@@ -59,7 +61,7 @@ if (isset($_POST["submit"])) {
             if ($fileSize < 5000000) {
                 # ensure we have a unique filename and save it onto a local path
                 $fileNameUni = uniqid('', true).".".$actExt;
-                $fileDest = '/var/www/auction/img/'.$fileNameUni;
+                $fileDest = '/var/www/auction/itemimg/'.$fileNameUni;
                 move_uploaded_file($fileTmp, $fileDest);
             }else {
                 array_push($errors, "File size exceeded (must be less than 5mb)!");
@@ -85,8 +87,7 @@ if (isset($_POST["submit"])) {
         array_push($errors, "Invalid auction end date!");
     }
 
-    require_once "database.php";
-    $sql = "SELECT * FROM Auction WHERE sellerName = '$userName' AND title = '$title'";
+    $sql = "SELECT * FROM Auction WHERE sellerID = '$sellerID' AND title = '$title'";
     $result = mysqli_query($conn, $sql);
     $count = mysqli_num_rows($result);
     if ($count>0) {
@@ -101,9 +102,9 @@ if (isset($_POST["submit"])) {
         header("Location: create_auction.php");
         exit();
     }else{
-        $sqlA = "INSERT INTO Auction (title, itemCondition, description, category, startDate, startingPrice, reservePrice, 
-        endDate, mailSent, noBid, winner, imgFileName, sellerName) VALUES ('$title', '$condition','$description', '$category', '$currentdate', 
-        '$startprice', '$reserveprice', '$enddateSQL', 'FALSE', '1', 'None', '$fileNameUni', '$userName')";
+        $sqlA = "INSERT INTO Auction (title, itemCondition, description, category, startDate, startingPrice, reservePrice, winningPrice, 
+        endDate, mailSent, numBid, winnerID, imgFileName, sellerID) VALUES ('$title', '$condition','$description', '$category', '$currentdate', 
+        '$startprice', '$reserveprice', '$startprice', '$enddateSQL', 'FALSE', '1', 'None', '$fileNameUni', '$sellerID')";
 
         if ($conn->query($sqlA) === TRUE) {
             echo('<div class="alert alert-success">Auction successfully created! <a href="mylistings.php">View your 

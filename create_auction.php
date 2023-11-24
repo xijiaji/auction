@@ -1,5 +1,6 @@
 <?php include_once("header.php");
 include("winner_script.php");
+require("utilities.php");
 ?>
 
 <?php
@@ -63,14 +64,13 @@ include("winner_script.php");
           <label for="auctionCategory" class="col-sm-2 col-form-label text-right">Category</label>
           <div class="col-sm-10">
             <select class="form-control" name="category" id="auctionCategory">
-              <option value ="none" selected>Choose...</option>
-              <option value="health">Health & Beauty</option>
-              <option value="home">Home & Garden</option>
-              <option value="business">Business & Industrial</option>
-              <option value="clothes">Clothing & Accessories</option>
-              <option value="electronic">Electronics</option>
-              <option value="food">Food & Drink</option>
-              <option value="miscellaneous">Miscellaneous</option>
+              <option selected value="">All categories</option>
+              <option value="racket">Rackets</option>
+              <option value="bag">Bags</option>
+              <option value="ball">Balls</option>
+              <option value="grip">Grips</option>
+              <option value="bumper">Bumpers & Grommets</option>
+              <option value="other">Accessories</option>
             </select>
             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
           </div>

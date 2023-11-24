@@ -38,7 +38,7 @@ if (isset($_POST["submit"])) {
     }else{
         session_start();
         $_SESSION['logged_in'] = true;
-        $_SESSION['username'] = $key["name"];
+        $_SESSION['username'] = $key["userName"];
         $_SESSION['account_type'] = $key["type"];
         
         echo('<div class="alert alert-success">You are now logged in! Redirect in 5 secs.</div>');

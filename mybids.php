@@ -21,7 +21,7 @@
   
   // TODO: Loop through results and print them out as list items.
 session_start();
-$userName = $_SESSION['username']; 
+$username = $_SESSION['username']; 
 
 # page display logic
 if (!isset($_GET['page'])) {
@@ -40,7 +40,8 @@ if ($page=='' || $page=='1'){
 }
 
 require_once "database.php";
-$readSql = "SELECT DISTINCT auctionID FROM Bid WHERE buyerName = '$userName' LIMIT $p,10";
+$buyerid = extract_userID($username);
+$readSql = "SELECT DISTINCT auctionID FROM Bid WHERE buyerID = '$buyerid' LIMIT $p,10";
 $result = mysqli_query($conn, $readSql);
 
 $num_results = mysqli_num_rows($result);
@@ -51,9 +52,7 @@ $max_page = ceil($num_results / $results_per_page);
 if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 'buyer') {
   header('Location: browse.php');
 }
-
-
-$readSql = "SELECT DISTINCT auctionID FROM Bid WHERE buyerName = '$userName'";
+$readSql = "SELECT DISTINCT auctionID FROM Bid WHERE buyerID = '$buyerid'";
 $result = mysqli_query($conn, $readSql);
 
 if ($result != null) {
@@ -61,7 +60,7 @@ if ($result != null) {
   while($row = mysqli_fetch_assoc($result)) {
     $auction_id = "$row[auctionID]";
 
-    $sql = "SELECT MAX(price) FROM Bid WHERE buyerName = '$userName' AND auctionID = '$auction_id'";
+    $sql = "SELECT MAX(price) FROM Bid WHERE buyerID = '$buyerid' AND auctionID = '$auction_id'";
     $result1 = mysqli_query($conn, $sql);
     $row1 = mysqli_fetch_assoc($result1);
     
@@ -69,19 +68,20 @@ if ($result != null) {
     $result2 = mysqli_query($conn, $sql2);
     $row2 = mysqli_fetch_assoc($result2);
 
-    $sql3 = "SELECT winner FROM Auction WHERE auctionID = '$auction_id'";
+    $sql3 = "SELECT winnerID FROM Auction WHERE auctionID = '$auction_id'";
     $result3 = mysqli_query($conn, $sql3);
-    $winner = mysqli_fetch_assoc($result3)['winner'];
+    $winnerID = mysqli_fetch_assoc($result3)['winnerID'];
+    $winner = extract_userName($winnerID);
 
     if ($row1['MAX(price)'] >= $row2['MAX(price)']) {
       $status = "Winning";
-      if ($userName == $winner) {
+      if ($username == $winner) {
         $status = "Auction Ended. You've won!";
       }
-    }else if ($winner != 'None'){
+    }else if ($winner != ''){
       $status = "Auction Ended. '$winner' won.";
     } else {
-      $status = "Outbide";
+      $status = "Outbid";
     } 
 
     $nextSql = "SELECT * FROM Auction WHERE auctionID = '$auction_id'";

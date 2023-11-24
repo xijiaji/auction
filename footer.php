@@ -9,5 +9,8 @@
 <script src="js/bootstrap.bundle.min.js"></script>
 
 </body>
+<footer class="footer">
+        <div align="center">2023 GROUP 4 Database Project.</div>
+</footer>
 
 </html>

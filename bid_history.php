@@ -9,11 +9,11 @@
 <h2 class="my-3">Item Bid History</h2>
 
 <?php
+require_once "database.php";
 
 $auction_id = $_GET['auction_id'];
 
 # page display logics
-require_once "database.php";
 $readSql = "SELECT * FROM Bid WHERE auctionID = '$auction_id'";
 $result = mysqli_query($conn, $readSql);
 
@@ -29,8 +29,29 @@ if ($page=='' || $page=='1'){
   $p=$page*10 - 10;
 }
 
+# display profile
+$sql2 = "SELECT * FROM Auction WHERE auctionID = '$auction_id'";
+$result2 = mysqli_query($conn, $sql2);
+$row2 = mysqli_fetch_assoc($result2);
 
-$sql = "SELECT * FROM Bid WHERE auctionID = '$auction_id' LIMIT $p,10";
+$title = "$row2[title]";
+$condition = "$row2[itemCondition]";
+$description = "$row2[description]";
+$imgName = "$row2[imgFileName]";
+
+$sellerID = "$row2[sellerID]";
+$seller = extract_userName($sellerID);
+
+echo('<div class="p-2 mr-5"><img src="itemimg/'.$imgName.'" width="120px" height="120px"></div>');
+echo('<div class="p-2 mr-5"><h5>Profile: '.$title.' | Seller: '.$seller.'</h5>
+      <h6>'.$condition.'</h6>
+      <h7>'.$description.'</h7>
+      </div>
+      '
+);
+
+
+$sql = "SELECT * FROM Bid WHERE auctionID = '$auction_id' ORDER BY price DESC LIMIT $p,10";
 $result = mysqli_query($conn, $sql);
 
 if ($result != null) {
@@ -38,19 +59,11 @@ if ($result != null) {
     while($row = mysqli_fetch_assoc($result)) {
 
         $price = $row['price'];
-        $name = $row['buyerName'];
+        $nameid = $row['buyerID'];
+        $name = extract_userName($nameid);
         $dtime = "$row[bidDate]";
 
-        $sql2 = "SELECT * FROM Auction WHERE auctionID = '$auction_id'";
-        $result2 = mysqli_query($conn, $sql2);
-        $row2 = mysqli_fetch_assoc($result2);
-
-        $title = "$row2[title]";
-        $condition = "$row2[itemCondition]";
-        $description = "$row2[description]";
-        $imgName = "$row2[imgFileName]";
-
-        print_itembid_li($name, $title, $condition, $description, $price, $dtime, $imgName);
+        print_itembid_li($name, $price, $dtime);
     }
 } 
 
@@ -114,7 +127,7 @@ if ($result != null) {
   }
 ?>
 
-  </ul>
+</ul>
 
 
 

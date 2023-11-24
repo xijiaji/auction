@@ -1,6 +1,6 @@
 <?php include_once("header.php");
-  require("utilities.php");
   include("winner_script.php");
+  require("utilities.php");
 ?>
 
 <div class="container">
@@ -31,13 +31,12 @@
         <label for="cat" class="sr-only">Search within:</label>
         <select class="form-control" name="category" id="cat">
           <option selected value="">All categories</option>
-          <option value="health">Health & Beauty</option>
-          <option value="home">Home & Garden</option>
-          <option value="business">Business & Industrial</option>
-          <option value="clothes">Clothing & Accessories</option>
-          <option value="electronic">Electronics</option>
-          <option value="food">Food & Drink</option>
-          <option value="miscellaneous">Miscellaneous</option>
+          <option value="racket">Rackets</option>
+          <option value="bag">Bags</option>
+          <option value="ball">Balls</option>
+          <option value="grip">Grips</option>
+          <option value="bumper">Bumpers & Grommets</option>
+          <option value="other">Accessories</option>
         </select>
       </div>
     </div>
@@ -62,6 +61,7 @@
 </div>
 
 <?php
+
   // Retrieve these from the URL
   if (isset($_GET['keyword'])) {
     // TODO: Define behavior if a keyword has not been specified.
@@ -133,7 +133,7 @@
      retrieved from the query -->
 
 <?php
-  // Demonstration of what listings will look like using dummy data.
+  // display only 10 items per page
 $readSql = "SELECT * FROM Auction WHERE title LIKE '%$keyword%' AND category LIKE '%$category%' ORDER BY $order LIMIT $p,10";
 
 $result = mysqli_query($conn, $readSql);
@@ -147,8 +147,8 @@ if (mysqli_num_rows($result) == 0){
     $title = "$row[title]";
     $condition = "$row[itemCondition]";
     $description = "$row[description]";
-    $current_price = $row['startingPrice'];
-    $num_bids = $row['noBid'];
+    $current_price = $row['winningPrice'];
+    $num_bids = $row['numBid'];
     $end_date = new DateTime($row['endDate']);
     $imgName = "$row[imgFileName]";
     

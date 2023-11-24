@@ -21,7 +21,7 @@
   // TODO: Use item_id to make a query to the database.
 
   $sql = "SELECT * FROM Auction WHERE auctionID = '$auction_id'";
-  $sql2 = "SELECT buyerName FROM Bid WHERE auctionID = '$auction_id' AND price = (SELECT MAX(price) FROM Bid WHERE 
+  $sql2 = "SELECT buyerID FROM Bid WHERE auctionID = '$auction_id' AND price = (SELECT MAX(price) FROM Bid WHERE 
   auctionID = '$auction_id')";
   $result = mysqli_query($conn, $sql);
   $result2 = mysqli_query($conn, $sql2);
@@ -29,15 +29,17 @@
   $row = mysqli_fetch_assoc($result);
   $row2 = mysqli_fetch_assoc($result2);
 
-  $lastBidder = $row2['buyerName'];
+  $lastBidderID = $row2['buyerID'];
+  $sellerID = "$row[sellerID]";
+  $lastBidder = extract_userName($lastBidderID);
 
   $title = "$row[title]";
   $condition = "$row[itemCondition]";
   $description = "$row[description]";
-  $current_price = $row['startingPrice'];
-  $num_bids = $row['noBid'];
+  $current_price = $row['winningPrice'];
+  $num_bids = $row['numBid'];
   $end_time = new DateTime($row['endDate']);
-  $seller = "$row[sellerName]";
+  $seller = extract_userName($sellerID);
   $imgName = "$row[imgFileName]";
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
@@ -65,7 +67,7 @@
 <div class="row"> <!-- Row #1 with auction title + watch button -->
   <div class="col-sm-8"> <!-- Left col -->
     <h2 class="my-3"><?php echo($title); ?></h2>
-    <?php echo '<div class="p-2 mr-5"><img src="img/'.$imgName.'" width="150px" height="150px"></div>'?>
+    <?php echo '<div class="p-2 mr-5"><img src="itemimg/'.$imgName.'" width="150px" height="150px"></div>'?>
   </div>
   <div class="col-sm-4 align-self-center"> <!-- Right col -->
 <?php
@@ -104,9 +106,10 @@
      This auction ended <?php echo(date_format($end_time, 'j M H:i')) ?>
      <!-- TODO: Print the result of the auction here? -->
      <?php 
-      $sql = "SELECT winner FROM Auction WHERE auctionID = '$auction_id'";
+      $sql = "SELECT winnerID FROM Auction WHERE auctionID = '$auction_id'";
       $result = mysqli_query($conn, $sql);
-      $winner = mysqli_fetch_assoc($result)['winner'];
+      $winnerID = mysqli_fetch_assoc($result)['winnerID'];
+      $winner = extract_userName($winnerID);
 
       echo ('<h4>"' .$winner. '" won this auction.</h4>');
      ?>

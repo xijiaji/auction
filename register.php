@@ -44,6 +44,34 @@ $_SESSION["messages"]="";
     </div>
   </div>
   <div class="form-group row">
+    <label for="firstname" class="col-sm-2 col-form-label text-right">First name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First name">
+      <small id="firstnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="lastname" class="col-sm-2 col-form-label text-right">Last name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last name">
+      <small id="lastnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="phone" class="col-sm-2 col-form-label text-right">Phone</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone">
+      <small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="address" class="col-sm-2 col-form-label text-right">Shipping address</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="address" name="address" placeholder="Shipping address">
+      <small id="addressHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+    </div>
+  </div>
+  <div class="form-group row">
     <label for="password" class="col-sm-2 col-form-label text-right">Password</label>
     <div class="col-sm-10">
       <input type="password" class="form-control" id="password" name="password" placeholder="Password">

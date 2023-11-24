@@ -57,7 +57,7 @@ function print_listing_li($auction_id, $title, $cond, $desc, $price, $num_bids, 
   // Print HTML
   echo('
   <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><img src="img/'.$imgName.'" width="120px" height="120px"></div>
+    <div class="p-2 mr-5"><img src="itemimg/'.$imgName.'" width="120px" height="120px"></div>
     <div class="p-2 mr-5"><h5><a href="listing.php?auction_id=' . $auction_id . '">' . $title . '</a></h5> <h6>' . $cond. '</h6> ' . $desc_shortened . '</div>
     <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $num_bids . $bid . '<br/>' . $time_remaining . '</div>
   </li>'
@@ -78,14 +78,14 @@ function print_bid_li($auction_id, $title, $cond, $desc, $price, $status, $imgNa
   // Print HTML
   echo('
     <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><img src="img/'.$imgName.'" width="120px" height="120px"></div>
+    <div class="p-2 mr-5"><img src="itemimg/'.$imgName.'" width="120px" height="120px"></div>
     <div class="p-2 mr-5"><h5><a href="listing.php?auction_id=' . $auction_id . '">' . $title . '</a></h5> <h6>' . $cond. '</h6> ' . $desc_shortened . '</div>
     <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $status . '</div>
   </li>'
   );
 }
 
-function print_itembid_li($name, $title, $cond, $desc, $price, $dtime, $imgName)
+function print_itembid_li($name, $price, $dtime)
 {
   // Truncate long descriptions
   if (strlen($desc) > 250) {
@@ -95,16 +95,28 @@ function print_itembid_li($name, $title, $cond, $desc, $price, $dtime, $imgName)
     $desc_shortened = $desc;
   }
   
-
   // Print HTML
   echo('
   <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><h7>Bidder: ' . $name . '</h7><h5>'. $title . '</a></h5> <h6>' . $cond. '</h6> ' . $desc_shortened . '</div>
+    <div class="p-2 mr-5"><h6>Bidder: ' . $name . '</h6></div>
     <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>'. $dtime .'</div>
   </li>'
   );
 }
 
-
+# extract userid from username, useful in many cases
+function extract_userID($username){
+  require "database.php";
+  $sql = "SELECT id FROM User WHERE userName = '$username'";
+  $result = mysqli_query($conn, $sql);
+  return mysqli_fetch_assoc($result)['id'];
+}
+# extract username from userid, useful in many cases
+function extract_userName($id){
+  require "database.php";
+  $sql = "SELECT userName FROM User WHERE id = '$id'";
+  $result = mysqli_query($conn, $sql);
+  return mysqli_fetch_assoc($result)['userName'];
+}
 
 ?>
