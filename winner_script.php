@@ -87,7 +87,7 @@ if ($result != null) {
                 } else{
                   $mail->addAddress("$rowB");
                   $mail->Subject = 'An auction has ended from TSPORT-Auction!';
-                  $mail->Body = "Your bid item - '$title' (seller - '$seller') has ended, $winner won the auction.";
+                  $mail->Body = "Your bid item - '$title' (seller - '$seller') has ended, '$winner' won the auction.";
                   $mail->send();
                   $mail->clearAddresses();
                 }
