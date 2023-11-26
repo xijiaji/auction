@@ -14,7 +14,7 @@
   // Get info from the URL:
   $auction_id = $_GET['auction_id'];
   $_SESSION['auction_id'] = $auction_id;
-  $userName = $_SESSION['username'];
+  $username = $_SESSION['username'];
 
 
   require_once "database.php";
@@ -83,7 +83,53 @@
       <button type="button" class="btn btn-success btn-sm" disabled>Watching</button>
       <button type="button" class="btn btn-danger btn-sm" onclick="removeFromWatchlist()">Remove watch</button>
     </div>
+
+    
 <?php endif /* Print nothing otherwise */ ?>
+<?php
+# check if the winner of the auction belongs to the user, if yes, display transaction button.
+  $winnerID = $row['winnerID'];
+  $userID = extract_userID($username);
+  $reserve_price = $row['reservePrice'];
+  $winner_price = $row['winningPrice'];
+
+  $pound = '<h7>&pound</h7>';
+
+  $sql_bid = "SELECT status FROM Transaction WHERE auctionID = '$auction_id'";
+
+  if ($conn->query($sql_bid) == TRUE){
+    $result_bid = mysqli_query($conn, $sql_bid);
+    $stat = mysqli_fetch_assoc($result_bid)['status'];
+
+    if ($stat == 'ongoing'){
+      
+      if ($winnerID == $userID){
+        if ($winner_price < $reserve_price){
+          echo("<h6 class='alert alert-success'>Congratulation! However, your bid is less than the reserve price. Therefore, 
+          you're offered a value of $pound$reserve_price for the purchase of this item.</h6>");
+          echo("<h6 class='alert alert-success'>Will you accept it?</h6>");
+          ?>
+          <form method="POST" action="transac_result.php">
+            <button type="submit" name="accept">Accept payment</button>
+            <button type="submit" name="reject">Reject payment</button>
+          </form>
+        <?php
+        }else{
+          echo("<h6 class='alert alert-success'>Congratulation! You're offered a value of $pound$winner_price for the purchase of this 
+          item.</h6>");
+          echo("<h6 class='alert alert-success'>Would you like to accept it?</h6>");
+          ?>
+          <form method="POST" action="transac_result.php">
+            <button type="submit" name="accept">Accept payment</button>
+            <button type="submit" name="reject">Reject payment</button>
+          </form>
+        <?php
+        }
+      }
+    }
+  }
+
+?>
   </div>
 </div>
 
@@ -110,9 +156,13 @@
       $result = mysqli_query($conn, $sql);
       $winnerID = mysqli_fetch_assoc($result)['winnerID'];
       $winner = extract_userName($winnerID);
-
-      echo ('<h4>"' .$winner. '" won this auction.</h4>');
-     ?>
+      echo($winnerID);
+      if (empty($winner)){#
+        echo ("<h4> There's zero bidder for this auction.</h4>");
+      }else{
+        echo ('<h4>"' .$winner. '" won this auction.</h4>');
+      }
+  ?>
 
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p> 
@@ -142,6 +192,26 @@
 
 </div> <!-- End of row #2 -->
 
+<!-- check if the current item already exist in the watchlist for the user, if yes, pass true to javascript, so watchlist button stay -->
+<?php
+  $sql = "SELECT * FROM Watchlist";
+  $result = mysqli_query($conn, $sql);
+  $count = mysqli_num_rows($result);
+
+  $user_id = extract_userID($username);
+  $yes = '';
+
+  if ($count > 0){
+    while ($row = mysqli_fetch_assoc($result)){
+
+      $buyer_id = $row["buyerID"];
+      $trancitem_id = $row["auctionID"];
+      if (($buyer_id == $user_id) AND ($trancitem_id == $auction_id)){
+        $yes = 'true';
+      } 
+    }
+  }
+?>
 
 
 <?php include_once("footer.php")?>
@@ -150,9 +220,16 @@
 <script> 
 // JavaScript functions: addToWatchlist and removeFromWatchlist.
 
-function addToWatchlist(button) {
-  console.log("These print statements are helpful for debugging btw");
+// Ensure watchlist button stay unchanged by checking php passed argument
+var doesExist = <?php echo(json_encode($yes))?>;
+if (doesExist == "true"){
+  $("#watch_nowatch").hide();
+  $("#watch_watching").show();
+}
 
+
+
+function addToWatchlist(button) {
   // This performs an asynchronous call to a PHP function using POST method.
   // Sends auction ID as an argument to that function.
   $.ajax('watchlist_funcs.php', {
@@ -164,7 +241,7 @@ function addToWatchlist(button) {
         // Callback function for when call is successful and returns obj
         console.log("Success");
         var objT = obj.trim();
- 
+
         if (objT == "success") {
           $("#watch_nowatch").hide();
           $("#watch_watching").show();
@@ -213,6 +290,7 @@ function removeFromWatchlist(button) {
         console.log("Error");
       }
   }); // End of AJAX call
+
 
 } // End of addToWatchlist func
 </script>

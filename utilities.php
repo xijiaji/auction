@@ -74,7 +74,7 @@ function print_bid_li($auction_id, $title, $cond, $desc, $price, $status, $imgNa
     $desc_shortened = $desc;
   }
   
-
+  
   // Print HTML
   echo('
     <li class="list-group-item d-flex justify-content-between">
@@ -100,6 +100,28 @@ function print_itembid_li($name, $price, $dtime)
   <li class="list-group-item d-flex justify-content-between">
     <div class="p-2 mr-5"><h6>Bidder: ' . $name . '</h6></div>
     <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>'. $dtime .'</div>
+  </li>'
+  );
+}
+
+function print_transac_li($title, $condition, $desc, $payer, $payee, $price, $payer_add, $payee_add, $date, $status)
+{
+  // Truncate long descriptions
+  if (strlen($desc) > 250) {
+    $desc_shortened = substr($desc, 0, 250) . '...';
+  }
+  else {
+    $desc_shortened = $desc;
+  }
+  
+  // Print HTML
+  echo('
+  <li class="list-group-item d-flex justify-content-between">
+    <div class="alert alert-success"><h6>Payer: ' . $payer . '</h6><h5>Address: ' . $payer_add . '</h5></div>
+    <div class="text-center text-nowrap"><span style="font-size: 1.5em">Payment amount: £' . number_format($price, 2) . '</span>
+    <br/>'. $dtime .'<h6>Item: ' . $title . '</h6><h6>' . $condition . '</h6><h7>Description: ' . $desc . '</h7>
+    <h6>Transaction status: ' . $status . '</h6></div>
+    <div class="alert alert-danger"><h6>Payee: ' . $payee . '</h6><h5>Address: ' . $payee_add . '</h5></div>
   </li>'
   );
 }

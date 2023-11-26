@@ -53,19 +53,21 @@ echo('<div class="p-2 mr-5"><h5>Profile: '.$title.' | Seller: '.$seller.'</h5>
 
 $sql = "SELECT * FROM Bid WHERE auctionID = '$auction_id' ORDER BY price DESC LIMIT $p,10";
 $result = mysqli_query($conn, $sql);
+$count = mysqli_num_rows($result);
 
-if ($result != null) {
+if($count > 0){
+  while($row = mysqli_fetch_assoc($result)){
+    $price = $row['price'];
+    $nameid = $row['buyerID'];
+    $name = extract_userName($nameid);
+    $dtime = "$row[bidDate]";
+  
+    print_itembid_li($name, $price, $dtime);
+  }
+}else{
+  echo("<h5>No bid on this item so far.</h5>");
+}
 
-    while($row = mysqli_fetch_assoc($result)) {
-
-        $price = $row['price'];
-        $nameid = $row['buyerID'];
-        $name = extract_userName($nameid);
-        $dtime = "$row[bidDate]";
-
-        print_itembid_li($name, $price, $dtime);
-    }
-} 
 
 ?>
 

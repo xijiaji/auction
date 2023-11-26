@@ -63,6 +63,7 @@ if (isset($_POST["submit"])) {
         $sql = "UPDATE Auction SET winningPrice = '$bid', numBid = numBid + '1' WHERE auctionID = '$id'";
         $sql2 = "INSERT INTO Bid (price, bidDate, buyerID, auctionID) VALUES ('$bid','$currentdate','$buyerid','$id')";
 
+        # send updated email to previous winning bidder/or generic creation bid msg emial
         if (($conn->query($sql) === TRUE) AND ($conn->query($sql2) === TRUE)) {
 
             # check outbid conditions and send emails accordingly when called
@@ -127,6 +128,31 @@ if (isset($_POST["submit"])) {
                 $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
                 $mail->send();
                 $mail->clearAddresses();
+            }
+
+            # send email to users with this item on their watchlists
+            $sqlw = "SELECT W.*, A.* FROM Watchlist AS W, Auction AS A WHERE W.auctionID = A.auctionID";
+            $resultw = mysqli_query($conn, $sqlw);
+            $countw = mysqli_num_rows($resultw);
+
+            if ($countw > 0){
+                while($roww = mysqli_fetch_assoc($resultw)){
+                    $watcher_id = "$roww[buyerID]";
+                    $seller_id = "$roww[sellerID]";
+                    $seller = extract_userName($seller_id);
+
+                    if ($id == $roww['auctionID']) {
+                        $sqle = "SELECT email FROM User WHERE id= '$watcher_id'";
+                        $resulte = mysqli_query($conn, $sqle);
+                        $rowe = mysqli_fetch_assoc($resulte)['email'];
+
+                        $mail->addAddress("$rowe");
+                        $mail->Subject = 'Watchlist Notification From TSPORT-Auction!';
+                        $mail->Body = "'$username' created a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
+                        $mail->send();
+                        $mail->clearAddresses();
+                    }
+                }
             }
 
             echo('<div class="alert alert-success">Bid successfully created! Redirect in 5 secs.</a></div>');

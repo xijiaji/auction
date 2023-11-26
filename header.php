@@ -68,7 +68,10 @@
     </li>
 	<li class="nav-item mx-1">
       <a class="nav-link" href="recommendations.php">Recommended</a>
-    </li>');
+    </li>
+  <li class="nav-item mx-1">
+    <a class="nav-link" href="watchlist.php">Watchlist</a>
+  </li>');
   }
   if (isset($_SESSION['logged_in']) && $_SESSION['account_type'] == 'seller') {
   echo('
@@ -79,6 +82,14 @@
       <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
     </li>');
   }
+  if (isset($_SESSION['logged_in'])) {
+    echo('
+    <li class="nav-item mx-3">
+        <a class="nav-link" href="transac_history.php">Transaction History</a>
+      </li>');
+    }
+  
+
 ?>
   </ul>
 </nav>

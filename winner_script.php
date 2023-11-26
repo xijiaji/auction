@@ -32,7 +32,9 @@ if ($result != null) {
   while($row = mysqli_fetch_assoc($result)) {
       $endDate = new DateTime($row['endDate']);
       $auction_id = "$row[auctionID]";
-
+      
+      $reserve_price = "$row[reservePrice]";
+      $winner_price = "$row[winningPrice]";
 
       if ($now > $endDate) {
         $sent = "$row[mailSent]";
@@ -40,8 +42,8 @@ if ($result != null) {
         $sellerID = "$row[sellerID]";
 
         $sqln = "SELECT userName FROM User WHERE id = '$sellerID'";
-        $result = mysqli_query($conn, $sqln);
-        $seller = mysqli_fetch_assoc($result)['userName'];
+        $resultn = mysqli_query($conn, $sqln);
+        $seller = mysqli_fetch_assoc($resultn)['userName'];
 
         $sqle = "SELECT email FROM User WHERE userName = '$seller'";
         $resulte = mysqli_query($conn, $sqle);
@@ -56,18 +58,18 @@ if ($result != null) {
           $resultA = mysqli_query($conn, $sqlA);
 
           $winnerID = mysqli_fetch_assoc($resulti)['buyerID'];
-          $sqln = "SELECT userName FROM User WHERE id = '$winnerID'";
-          $result = mysqli_query($conn, $sqln);
-          $winner = mysqli_fetch_assoc($result)['userName'];
+          $sqlw = "SELECT userName FROM User WHERE id = '$winnerID'";
+          $resultw = mysqli_query($conn, $sqlw);
+          $winner = mysqli_fetch_assoc($resultw)['userName'];
 
           $sqlu = "UPDATE Auction SET winnerID = '$winnerID' WHERE auctionID = '$auction_id'";
           mysqli_query($conn, $sqlu);
 
           while ($rowA = mysqli_fetch_assoc($resultA)){
             $buyerID = "$rowA[buyerID]";
-            $sqln = "SELECT userName FROM User WHERE id = '$buyerID'";
-            $result = mysqli_query($conn, $sqln);
-            $buyer = mysqli_fetch_assoc($result)['userName'];
+            $sqll = "SELECT userName FROM User WHERE id = '$buyerID'";
+            $resultl = mysqli_query($conn, $sqll);
+            $buyer = mysqli_fetch_assoc($resultl)['userName'];
             
             $sqlB = "SELECT email FROM User WHERE userName = '$buyer'";
             $resultB = mysqli_query($conn, $sqlB);
@@ -94,13 +96,34 @@ if ($result != null) {
                 $mail->Body = "Your auction item - '$title' has ended, '$winner' won the auction.";
                 $mail->send();
                 $mail->clearAddresses();
+
+                # create transaction between winner and seller
+                if ($winner_price < $reserve_price){
+                  $final_price = $reserve_price;
+                }else{
+                  $final_price = $winner_price;
+                }
+                $trans_dtime = date('Y-m-d H:i:s', $phptime);
+                $sqlT = "INSERT INTO Transaction (date, amount, status, auctionID) VALUES ('$trans_dtime', '$final_price', 'ongoing', '$auction_id')";
+                $conn->query($sqlT);
                 }
             }
           # update mailSent as email(s) have already been sent
           $sqlD = "UPDATE Auction SET mailSent = 'TRUE' WHERE auctionID = '$auction_id'";
-          mysqli_query($conn, $sqlD);
+          $conn->query($sqlD);
           }
          }
+      }
+
+      # delete second duplicate transaction after creation
+      $sql_last = "SELECT auctionID FROM Transaction ORDER BY tID DESC LIMIT 1";
+      $sql_2last = "SELECT auctionID FROM Transaction ORDER BY tID DESC LIMIT 1,1";
+      $result_last = mysqli_query($conn, $sql_last);
+      $result_2last = mysqli_query($conn, $sql_2last);
+
+      if (mysqli_fetch_assoc($result_last)['auctionID'] == mysqli_fetch_assoc($result_2last)['auctionID']){
+        $sql_del = "DELETE FROM Transaction ORDER BY tID DESC LIMIT 1";
+        $conn->query($sql_del);
       }
   }
 
