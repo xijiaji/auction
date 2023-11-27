@@ -1,0 +1,350 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.1deb5ubuntu1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Generation Time: Nov 26, 2023 at 03:04 PM
+-- Server version: 8.0.34-0ubuntu0.22.04.1
+-- PHP Version: 8.1.2-1ubuntu2.14
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `testing`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Auction`
+--
+
+CREATE TABLE `Auction` (
+  `auctionID` int NOT NULL,
+  `itemTitle` varchar(100) NOT NULL,
+  `itemCondition`SET("New", "Used - Good", "Used - Fair"),
+  `description` text NOT NULL,
+  `category` SET("Rackets", "Bags", "Balls", "Shoes", "Appeal", "Accessories"),
+  `startDate` datetime NOT NULL,
+  `endDate` datetime NOT NULL,  
+  `startingPrice` float NOT NULL,
+  `reservePrice` float NOT NULL,
+  `winningPrice` float,
+  `sellerID` int NOT NULL,
+  `winnerID` int,
+  `mailSent` TINYINT NOT NULL,
+  `numBids` int NOT NULL,
+  `imgFileName` varchar(200) NOT NULL
+   )
+
+
+   INSERT INTO `Auction` (`auctionID`, `itemTitle`, `itemCondition`, 
+   `description`, `category`, `startDate`, `endDate`,  `startingPrice`, 
+   `reservePrice`, `winningPrice`, `sellerID`, `winnerID`, `mailSent`, `numBids`, `imgFileName`)
+    VALUES(1, 'LAVER CUP BLADE 98 (16X19) V8 TENNIS RACKET', 'New', 
+    'Most popular Blade racket that features colors and design details from the 2023 Laver Cup. The Blade 98 (16x19) V8 is highlighted by FORTYFIVEª lay-up technology, which increases flex and stability to create a more connected-to-the-ball feel.',
+    'Rackets', '2021-11-26', '2021-12-08', 200.87, 180.68, 280.9, 2609, 2167, 1, 5, '/Users/bixueying/Desktop/WechatIMG1107.png'),
+    
+    (2, 'EARTH DAY BLADE 98 (16X19) V8 TENNIS RACKET', 'New', 
+    'The Earth Day Blade 98 (16x19) v8 pairs eco-friendly design with a new layup to better accommodate the more modern, vertical swing path commonly used by competitive players. Equipped with water-based paint, Agiplast bumpers and grommets along with a biodegradable grip, this racket aims to take a step forward to a more sustainable future for the tennis industry.',
+    'Rackets', '2020-08-26', '2020-09-08', 230, 220, 260, 9456, 6453, 1, 3, '/Users/bixueying/Desktop/Image/EARTH DAY BLADE 98 (16X19) V8 TENNIS RACKET.png'),
+
+    (3, 'EARTH DAY CLASH 100 V2 TENNIS RACKET', 'Used - Good', 
+    'The hero model of the groundbreaking and immensely popular Clash line, the Earth Day Clash 100 v2 revises the recipe for more consistency within a more sustainable, eco-friendly design. An immediate appeal for its blend of flexibility and stability for a feeling unlike any other, this racket elevates playability thanks to a revised construction at the tip of the hoop that significantly enlarges the sweet spot.',
+    'Rackets', '2022-03-19', '2022-04-01', 210, 200, 270, 2609, 2167, 1, 4, '/Users/bixueying/Desktop/Image/EARTH DAY CLASH 100 V2 TENNIS RACKET.png'),
+
+    (4, 'ULTRA PRO (16X19) V4 TENNIS RACKET', 'Used - Fair', 
+    'One of two Ultra Pro frames developed for advanced players, the Ultra Pro (16x19) V4 stacks slick, alluring design with powerful performance fit for pro-caliber skills. Equipped with a thin beam and a notable head-light balance that prioritizes control and feel for the ball, this racket also offers up an open string pattern that enables more topspin and responsiveness off the string bed.',
+    'Rackets', '2023-04-20', '2023-05-09', 190, 180, 235, 2609, 4934, 1, 2, '/Users/bixueying/Desktop/Image/ULTRA PRO (16X19) V4 TENNIS RACKET.png'),
+
+    (5, 'RF DNA 12 PACK', 'Used - Fair', 
+    'The latest evolution of the RF DNA 12 Pack embodies the premium, classic style of Roger collection with state-of-the-art design and functionality for tennis players.',
+    'Bags', '2023-01-19', '2023-02-18', 100, 80, 160, 9456, 6453, 1, 3, '/Users/bixueying/Desktop/Image/RF DNA 12 PACK.png'),
+
+    (6, 'TEAM BACKPACK', 'Used - Good', 
+    'If you walk or bike to the tennis courts, a backpack can be a more comfortable (and versatile) option than a racket bag. Team Backpack is a great compact choice for players who need space for one-to-two tennis rackets, a change of clothes and a few other pieces of gear.',
+    'Bags', '2023-07-16', '2023-08-18', 30, 20, 55, 2609, 1764, 1, 1, '/Users/bixueying/Desktop/Image/TEAM BACKPACK.png'),
+
+    (7, 'PRO STAFF V14 SUPER TOUR DUFFEL', 'New', 
+    'One for the high-level tennis player. This Wilson duffel bag has all the clean appeal of our Pro Staff franchise with a simple, no-frills design. Pack gear like clothes and balls into the main compartment, and stash smaller items into the accessory pocket.',
+    'Bags', '2023-11-02', '2023-11-17', 40, 30, 60, 2609, 6453, 1, 2, '/Users/bixueying/Desktop/Image/PRO STAFF V14 SUPER TOUR DUFFEL.png'),
+
+    (8, 'TRINITI 4 BALL SLEEVE', 'New', 
+    'The first performance tennis ball designed with 100% recyclable packaging, Triniti pushes the limits of sustainable performance. Featuring a unique octagonal paper container, the Triniti sleeve is fully recyclable after use.',
+    'Balls', '2021-09-16', '2021-10-01', 7, 5, 10, 9456, 6453, 1, 1, '/Users/bixueying/Desktop/Image/TRINITI 4 BALL SLEEVE.png'),
+
+    (9, 'ROLAND-GARROS MINI JUMBO BALL', 'Used - Good', 
+    'This Roland-Garros Mini Jumbo Ball doubles as a great display piece in your home or an excellent souvenir with autographs from tennis players.',
+    'Balls', '2023-06-10', '2023-06-30', 15, 10, 20, 9456, 2167, 1, 1, '/Users/bixueying/Desktop/Image/ROLAND-GARROS MINI JUMBO BALL.png'),
+
+    (10, "KAOS MIRAGE MEN'S TENNIS SHOE", 'New', 
+    'Developed from jet fighter inspiration, the Kaos Mirage combines innovative Kaos Chassis Technology with an incredibly sleek, lightweight design for ultimate on-court acceleration and agility.',
+    'Shoes', '2022-05-20', '2022-06-09', 110, 100, 150, 9456, 4934, 1, 3, "/Users/bixueying/Desktop/Image/KAOS MIRAGE MEN'S TENNIS SHOE.png"),
+
+    (11, "RUSH PRO 4.0 CLAY PARIS EDITION WOMEN'S TENNIS SHOE", 'Used - Good', 
+    'Featuring a unique design crafted by French graffiti artist Hope, the Rush Pro 4.0 Clay Paris Edition combines head-turning style with awe-inspiring performance.',
+    'Shoes', '2023-10-16', '2023-10-29', 110, 100, 135, 2609, 4934, 1, 2, "/Users/bixueying/Desktop/Image/RUSH PRO 4.0 CLAY PARIS EDITION WOMEN'S TENNIS SHOE.png"),  
+
+    (12, 'RUSH PRO 4.0 QL JUNIOR TENNIS SHOE', 'New', 
+    'The Rush Pro 4.0 QL Jr makes it easier than ever to put your shoes on and take them off with Quicklace, a technology that applies one-pull tightening in place of traditional laces.',
+    'Shoes', '2021-04-10', '2021-04-26', 50, 40, 65, 9456, 1764, 1, 2, '/Users/bixueying/Desktop/Image/RUSH PRO 4.0 QL JUNIOR TENNIS SHOE.png'),
+
+    (13, "TEAM II WOVEN JACKET MEN'S", 'New', 
+    'The Team II Woven Jacket consists of a polyester fabric with mesh lining and a shaped hem for excellent movement from sideline to sideline. This relaxed full-zip warm up jacket will help elevate your game when the temperature drops.',
+    'Appeal', '2021-09-30', '2021-10-16', 45, 45, NULL, 2609, NULL, 0, 0, "/Users/bixueying/Desktop/Image/TEAM II WOVEN JACKET MEN'S.png"),
+
+    (14, "TEAM II POLO MEN'S", 'New', 
+    'Take the court with confidence in this 3-button Team II Polo. Highlighted by knit contrast details at the sleeve cuffs and collar, this performance polyester top serves up a professional look with an emphasis on comfort and optimal movement.',
+    'Appeal', '2023-01-10', '2021-02-03', 55, 40, 65, 9456, 4934, 1, 2, "/Users/bixueying/Desktop/Image/TEAM II POLO MEN'S.png"),
+  
+    (15, 'TEAM II 3.5" SHORT', 'New', 
+    'Equipped with rib knit v-notch side vents and built-in compression shorts, the Team II 3.5" Short provides ample breathability and stability for tennis practices and matches on game day.',
+    'Appeal', '2022-03-17', '2022-04-10', 26.25, 23,  NULL, 2609,  NULL, 0, 0, '/Users/bixueying/Desktop/Image/TEAM II 3.5" SHORT.png'),
+
+    (16, '75 BALL PICK-UP HOPPER', 'Used - Good', 
+    'Equipped with rib knit v-notch side vents and built-in compression shorts, the Team II 3.5" Short provides ample breathability and stability for tennis practices and matches on game day.',
+    'Accessories', '2020-09-20', '2020-10-10', 28, 20, NULL, 9456, NULL, 0, 0, '/Users/bixueying/Desktop/Image/75 BALL PICK-UP HOPPER.png'),
+
+    (17, "STARTER EZ TENNIS NET 10'", 'New', 
+    'The Starter EZ Tennis Net makes it possible to build a tennis court in your own backyard - no tools needed. Easy to set up and tear down within minutes, this net is 10 feet long and includes a carrying case for excellent portability.',
+    'Accessories', '2019-02-07', '2019-02-10', 100, 85, 105, 2609, 1764, 1, 3, "/Users/bixueying/Desktop/Image/STARTER EZ TENNIS NET 10'.png"),
+
+    (18, 'MARKER SPOTS', 'Used - Fair', 
+    'A versatile tool for tennis players and coaches, Marker Spots are useful for drills and on-court games. Featuring an assorted color pack that all lay flat on the ground for minimal interference, these spots can be useful for footwork drills, target practice or a variety of games for players honing their craft.',
+    'Accessories', '2023-10-03', '2023-10-30', 20, 20, 35.5, 2609, 6453, 1, 2, '/Users/bixueying/Desktop/Image/MARKER SPOTS.png');
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Bid`
+--
+
+CREATE TABLE `Bid` (
+  `bidID` int NOT NULL,
+  `bidPrice` float NOT NULL,
+  `bidDate` datetime NOT NULL,
+  `buyerID` int NOT NULL,
+  `auctionID` int NOT NULL
+) 
+
+-- --------------------------------------------------------
+
+INSERT INTO `Bid` (`bidID`, `bidPrice`, `bidDate`, `buyerID`, `auctionID`) VALUES
+
+(50, 210, '2021-11-28', 6453, 1),
+(51, 270, '2021-11-29', 4934, 1),
+(52, 275, '2021-12-04', 4934, 1),
+(53, 279, '2021-12-05', 2167, 1),
+(54, 280.9, '2021-12-07', 2167, 1),
+
+
+(55, 240, '2020-08-27', 6453, 2),
+(56, 250, '2021-08-30', 1764, 2),
+(57, 260, '2021-09-06', 6453, 2),
+
+
+(58, 220, '2022-03-20', 1764, 3),
+(59, 230, '2022-03-25', 1764, 3),
+(60, 250, '2022-03-28', 2167, 3),
+(61, 270, '2022-03-31', 2167, 3),
+
+(62, 220, '2023-04-25', 2167, 4),
+(63, 235, '2023-05-08', 4934, 4),
+
+
+
+(64, 120, '2023-01-30', 6453, 5),
+(65, 140, '2023-02-10', 1764, 5),
+(66, 160, '2023-02-15', 6453, 5),
+
+
+(67, 55, '2023-08-15', 1764, 6),
+
+(68, 50, '2023-11-05', 1764, 7),
+(69, 60, '2023-11-16', 6453, 7),
+
+(70, 10, '2021-09-30', 6453, 8),
+
+(71, 20, '2023-06-25', 1764, 9),
+
+(72, 120, '2022-05-30', 4934, 10),
+(73, 140, '2022-06-04', 2167, 10),
+(74, 150,'2022-06-08', 4934, 10),
+
+(75, 130, '2023-10-19', 2167, 11),
+(76, 135, '2023-10-23', 4934, 11),
+
+(77, 55, '2021-04-15', 2167, 12),
+(78, 65, '2021-04-25', 1764, 12),
+
+(79, 60, '2023-01-15', 1764, 14),
+(80, 65, '2023-02-01', 4934, 14),
+
+(81, 102, '2019-02-08', 1764, 17),
+(82, 103, '2019-02-09', 6453, 17),
+(83, 105, '2019-02-10', 1764, 17),
+
+(84, 30, '2023-10-20', 2167, 18),
+(85, 35.5, '2023-10-23', 6453, 18),
+
+
+-- --------------------------------------------------------
+
+
+
+CREATE TABLE `Transaction` (
+  `transID` int NOT NULL,
+  `transTime` datetime NOT NULL,
+  `transStatus` SET('Pending', 'Completed', 'Cancelled', 'Refunded'),
+  `auctionID` int NOT NULL
+)
+-- --------------------------------------------------------
+-- --------------------------------------------------------
+
+INSERT INTO `Transaction` (`transID`, `transTime`, `transStatus`, `auctionID`) VALUES
+(100, '2021-12-20', 'Completed' , 1),
+(101, '2020-10-03', 'Completed' , 2),
+(102, '2022-05-15', 'Cancelled' , 3),
+(103, '2023-05-20', 'Completed' , 4),
+(104, '2023-03-10', 'Refunded' , 5),
+(105, '2023-09-01', 'Completed' , 6),
+(106, '2023-11-25', 'Pending' , 7),
+(107, '2021-10-30', 'Completed' , 8),
+(108, '2023-07-10', 'Completed' , 9),
+(109, '2022-06-28', 'Completed' , 10),
+(110, '2023-11-20', 'Pending' , 11),
+(111, '2021-05-15', 'Completed' , 12),
+
+(112, '2021-03-20', 'Completed' , 14),
+
+(113, '2019-03-20', 'Refunded' , 17),
+(114, '2023-11-18', 'Completed' , 18),
+--
+-- Table structure for table `User`
+--
+
+CREATE TABLE `User` (
+  `userID` int NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `type` SET("buyer", "seller"),
+  `firstName` text not null,
+  `lastName` text not null,
+  `phoneNumber` int not null
+) 
+
+--
+-- Dumping data for table `User`
+--
+INSERT INTO `User` (`userID`,`userName`, `email`, `password`, `type`, `firstName`, `lastName`, `phoneNumber`) VALUES
+(2167,  'jason94', 'jason_chan_12@hotmail.com','$2y$10$6hhYdRROJAtAOVhLyDZPVONrAwcEcbSkjMnw2SpCkYMBo7QsAhG3e', 'buyer',  'Jason', 'Chan', 778647123),
+(4934, 'cmcjas', 'cmcjas@example.com', '$2y$10$KenZw23NAr5unZIhj0IKDOZpENSgdYZKSQrp8wPyPXdfhyq4bTRju', 'buyer', 'Jackson', 'Cheung', 778647123),
+(2609, 'hey','Hey@example.com',  '$2y$10$LQ.bowaCFPA5Lp/ToGPk9eKvGjwwyu86D7tftl2qIWLUn1uzfySnK', 'seller', 'Harry', 'White', 778647123),
+(6453, 'boy', 'guy@testing.com', '$2y$10$DR/isrZtNx6oIDenKeStuOtNqte/0apw6lHE0keagaQ4ifqCf.wxW', 'buyer', 'Songyang', 'Chen', 778647123),
+(9456, 'girl', 'lady@testing.com',  '$2y$10$L5bARQvve3McVwgTLjUgKeXFaPpcRYX2PhxPMH6wRCjmvGovdnsky', 'seller',  'Yunxi', 'Huang', 778647123),
+(1764, 'd94', 'distance@testing.com', '$2y$10$ZjnBwjou0z1rRoe4OyXiCufKajQcMQKKKE.1V9pCWRNJgxlN6p.De','buyer', 'dean', 'grey', 778647123)
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Watchlist`
+--
+
+CREATE TABLE `Watchlist` (
+  `WID` int NOT NULL,
+  `buyerID` int NOT NULL,
+  `auctionID` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `Auction`
+--
+ALTER TABLE `Auction`
+  ADD PRIMARY KEY (`auctionID`),
+  ADD UNIQUE KEY `imgFileName` (`imgFileName`),
+  ADD KEY `winnerID` (`winnerID`),
+  ADD KEY `sellerID` (`sellerID`);
+
+--
+-- Indexes for table `Bid`
+--
+ALTER TABLE `Bid`
+  ADD PRIMARY KEY (`bidID`),
+  ADD KEY `buyerID` (`buyerID`),
+  ADD KEY `auctionID` (`auctionID`);
+
+--
+-- Indexes for table `Transaction`
+--
+ALTER TABLE `Transaction`
+  ADD PRIMARY KEY (`tID`),
+  ADD KEY `auctionID` (`auctionID`);
+
+--
+-- Indexes for table `User`
+--
+ALTER TABLE `User`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `userName` (`userName`);
+
+--
+-- Indexes for table `Watchlist`
+--
+ALTER TABLE `Watchlist`
+  ADD PRIMARY KEY (`WID`),
+  ADD KEY `buyerID` (`buyerID`),
+  ADD KEY `auctionID` (`auctionID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `Auction`
+--
+ALTER TABLE `Auction`
+  MODIFY `auctionID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT for table `Bid`
+--
+ALTER TABLE `Bid`
+  MODIFY `bidID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+
+--
+-- AUTO_INCREMENT for table `Transaction`
+--
+ALTER TABLE `Transaction`
+  MODIFY `tID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+
+--
+-- AUTO_INCREMENT for table `User`
+--
+ALTER TABLE `User`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `Watchlist`
+--
+ALTER TABLE `Watchlist`
+  MODIFY `WID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
