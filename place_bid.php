@@ -60,11 +60,11 @@ if (isset($_POST["submit"])) {
         exit();
     }else {
         $buyerid = extract_userID($username);
-        $sql = "UPDATE Auction SET winningPrice = '$bid', numBid = numBid + '1' WHERE auctionID = '$id'";
+        $sql1 = "UPDATE Auction SET winningPrice = '$bid', numBid = numBid + '1' WHERE auctionID = '$id'";
         $sql2 = "INSERT INTO Bid (price, bidDate, buyerID, auctionID) VALUES ('$bid','$currentdate','$buyerid','$id')";
 
         # send updated email to previous winning bidder/or generic creation bid msg emial
-        if (($conn->query($sql) === TRUE) AND ($conn->query($sql2) === TRUE)) {
+        if (($conn->query($sql1) === TRUE) AND ($conn->query($sql2) === TRUE)) {
 
             # check outbid conditions and send emails accordingly when called
             $sqlC = "SELECT buyerID FROM Bid WHERE price = (SELECT max(price) FROM Bid WHERE price < (SELECT max(price) FROM Bid 
@@ -80,7 +80,7 @@ if (isset($_POST["submit"])) {
                 $resultD = mysqli_query($conn, $sqlD);
                 $rowD = mysqli_fetch_assoc($resultD)['email'];
             } else{
-                $resultC = null;
+                $resultC = 'None';
             }
 
             $sqlI = "SELECT * FROM Auction WHERE auctionID = '$id'";
@@ -97,7 +97,7 @@ if (isset($_POST["submit"])) {
             $row = mysqli_fetch_assoc($result)['email'];
 
             # if bid exists, inform previous highest bidder that he/she's been outbid, otherwise create a generic bid email msg
-            if ($resultC != null){
+            if ($resultC != 'None'){
                 $mail->addAddress("$rowD");
             } else{
                 $mail->addAddress("$row");
@@ -106,8 +106,8 @@ if (isset($_POST["submit"])) {
             $pound = '<h7>&pound</h7>';
             $mail->Subject = 'Bid Notification From TSPORT-Auction!';
 
-            if ($buyername !== $username){
-                if ($resultC === null){
+            if ($buyername != $username){
+                if ($resultC == 'None'){
                     # generic msg when first time created a bid - exception handling
                     $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
                     $mail->send();

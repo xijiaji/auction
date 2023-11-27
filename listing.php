@@ -67,7 +67,7 @@
 <div class="row"> <!-- Row #1 with auction title + watch button -->
   <div class="col-sm-8"> <!-- Left col -->
     <h2 class="my-3"><?php echo($title); ?></h2>
-    <?php echo '<div class="p-2 mr-5"><img src="itemimg/'.$imgName.'" width="150px" height="150px"></div>'?>
+    <?php echo '<div class="p-2 mr-5"><img src="itemimg/'.$imgName.'" width="250px" height="250px"></div>'?>
   </div>
   <div class="col-sm-4 align-self-center"> <!-- Right col -->
 <?php

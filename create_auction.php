@@ -54,8 +54,8 @@ require("utilities.php");
             <select class="form-control" name="condition" id="auctionCondition">
               <option value ="none" selected>Choose...</option>
               <option value="New">New</option>
-              <option value="Used">Used</option>
-              <option value="Others">Other</option>
+              <option value="Used - good">Used - good</option>
+              <option value="Used - fair">Used - fair</option>
             </select>
             <small id="conditionHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
           </div>
@@ -68,8 +68,8 @@ require("utilities.php");
               <option value="racket">Rackets</option>
               <option value="bag">Bags</option>
               <option value="ball">Balls</option>
-              <option value="grip">Grips</option>
-              <option value="bumper">Bumpers & Grommets</option>
+              <option value="appeal">Appeal</option>
+              <option value="shoe">Shoes</option>
               <option value="other">Accessories</option>
             </select>
             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>

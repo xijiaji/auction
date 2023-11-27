@@ -34,8 +34,8 @@
           <option value="racket">Rackets</option>
           <option value="bag">Bags</option>
           <option value="ball">Balls</option>
-          <option value="grip">Grips</option>
-          <option value="bumper">Bumpers & Grommets</option>
+          <option value="appeal">Appeal</option>
+          <option value="shoe">Shoes</option>
           <option value="other">Accessories</option>
         </select>
       </div>

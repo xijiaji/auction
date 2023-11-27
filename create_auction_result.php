@@ -53,7 +53,7 @@ if (isset($_POST["submit"])) {
 
     $nameExt = explode('.', $fileName);  # extract filename format xxx.ext
     $actExt = strtolower(end($nameExt)); # extract the end of the filename ie. the extension name
-    $extAllowed = array('jpg', 'jpeg');  # allow only jpg and jpeg format images
+    $extAllowed = array('jpg', 'jpeg', 'png');  # allow only jpg and jpeg format images
 
     if (in_array($actExt, $extAllowed)) {
         if ($fileError === 0) {
@@ -80,7 +80,7 @@ if (isset($_POST["submit"])) {
         header("Location: create_auction.php");
         exit();  
     }
-    if ((strlen($title)>100) OR (strlen($description)>200) OR (strlen($category)>100)) {
+    if ((strlen($title)>100) OR (strlen($description)>500) OR (strlen($category)>100)) {
         array_push($errors, "User input length limit exceeded!");
     }
     if ($enddateSQL<=$currentdate) {
