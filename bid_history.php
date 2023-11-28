@@ -9,6 +9,11 @@
 <h2 class="my-3">Item Bid History</h2>
 
 <?php
+
+if (!isset($_SESSION['account_type'])) {
+  header('Location: browse.php');
+}
+
 require_once "database.php";
 
 $auction_id = $_GET['auction_id'];

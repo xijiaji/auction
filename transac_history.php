@@ -3,6 +3,11 @@ require("utilities.php");
 include("winner_script.php");
 ?>
 <?php
+
+if (!isset($_SESSION['account_type'])) {
+    header('Location: browse.php');
+  }
+  
 require_once("database.php");
 session_start();
 $username = $_SESSION['username'];

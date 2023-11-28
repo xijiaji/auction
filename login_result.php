@@ -13,15 +13,15 @@ $msgs = array();
 
 
 if (isset($_POST["submit"])) {
-    $email = $_POST["email"];
+    $user = $_POST["user"];
     $password = $_POST["password"];
     require_once "database.php";
-    $sql = "SELECT * FROM User WHERE email ='$email'";
+    $sql = "SELECT * FROM User WHERE userName ='$user'";
     $result = mysqli_query($conn, $sql);
     $key = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
     if (!$key) {
-        array_push($errors, "Incorrect email!");
+        array_push($errors, "Incorrect username!");
     }
 
     if (!password_verify($password, $key["password"])) {

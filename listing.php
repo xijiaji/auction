@@ -140,7 +140,11 @@
     <?php echo($description); ?>
     </div>
     <?php echo("<h6>Seller: $seller | Last bidder: $lastBidder</h6>"); ?>
-    <?php echo('<a href="bid_history.php?auction_id=' . $auction_id . '"><input type="submit" value="Bid History" /></a>');?>
+    <?php 
+    if (isset($_SESSION['account_type'])) {
+      echo('<a href="bid_history.php?auction_id=' . $auction_id . '"><input type="submit" value="Bid History" /></a>');
+    }
+    ?>
 
   </div>
 
