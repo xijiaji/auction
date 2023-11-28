@@ -46,7 +46,7 @@
         <select class="form-control" name="order" id="order_by">
           <option selected value="pricelow">Price (low to high)</option>
           <option value="pricehigh">Price (high to low)</option>
-          <option value="date">Soonest expiry</option>
+          <option value="date">Soonest expired date</option>
         </select>
       </div>
     </div>

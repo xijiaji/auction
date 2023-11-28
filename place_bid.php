@@ -109,23 +109,23 @@ if (isset($_POST["submit"])) {
             if ($buyername != $username){
                 if ($resultC == 'None'){
                     # generic msg when first time created a bid - exception handling
-                    $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
+                    $mail->Body = "You've sucessfully created a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
                     $mail->send();
                     $mail->clearAddresses();
                 }else{
                     # create an outbid warning msg to the last highest bidder
-                    $mail->Body = "Your bid item - '$title' (seller - '$seller') has been outbid by $username for $pound$bid.";
+                    $mail->Body = "Your bid on the item - '$title' (seller - '$seller') has been outbidded by $username for $pound$bid.";
                     $mail->send();
                     $mail->clearAddresses();
                     # also create a generic bid msg to the current user
                     $mail->addAddress("$row");
-                    $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
+                    $mail->Body = "You've sucessfully created a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
                     $mail->send();
                     $mail->clearAddresses();
                 }
             }else{
                 # send msg when user created a newer bid upon previous bids
-                $mail->Body = "You've sucessfully create a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
+                $mail->Body = "You've sucessfully created a bid for - '$title' (seller - '$seller') with the value of $pound$bid.";
                 $mail->send();
                 $mail->clearAddresses();
             }
