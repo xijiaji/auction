@@ -115,8 +115,7 @@
           </form>
         <?php
         }else{
-          echo("<h6 class='alert alert-success'>Congratulation! You're offered a value of $pound$winner_price for the purchase of this 
-          item.</h6>");
+          echo("<h6 class='alert alert-success'>Congratulations, you have won the auction for an offer price of $pound$winner_price.</h6>");
           echo("<h6 class='alert alert-success'>Would you like to accept it?</h6>");
           ?>
           <form method="POST" action="transac_result.php">
@@ -166,7 +165,7 @@
 
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p> 
-    <p class="lead">Number of bid: <?php echo(number_format($num_bids)) ?></p> 
+    <p class="lead">Number of bids: <?php echo(number_format($num_bids)) ?></p> 
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 <?php endif ?>
 

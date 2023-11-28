@@ -32,9 +32,6 @@ if ($result != null) {
   while($row = mysqli_fetch_assoc($result)) {
       $endDate = new DateTime($row['endDate']);
       $auction_id = "$row[auctionID]";
-      
-      $reserve_price = "$row[reservePrice]";
-      $winner_price = "$row[winningPrice]";
 
       if ($now > $endDate) {
         $sent = "$row[mailSent]";
@@ -98,13 +95,8 @@ if ($result != null) {
                 $mail->clearAddresses();
 
                 # create transaction between winner and seller
-                if ($winner_price < $reserve_price){
-                  $final_price = $reserve_price;
-                }else{
-                  $final_price = $winner_price;
-                }
                 $trans_dtime = date('Y-m-d H:i:s', $phptime);
-                $sqlT = "INSERT INTO Transaction (date, amount, status, auctionID) VALUES ('$trans_dtime', '$final_price', 'ongoing', '$auction_id')";
+                $sqlT = "INSERT INTO Transaction (date, status, auctionID) VALUES ('$trans_dtime', 'ongoing', '$auction_id')";
                 $conn->query($sqlT);
                 }
             }

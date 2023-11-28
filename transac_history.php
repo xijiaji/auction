@@ -25,8 +25,15 @@ if ($count > 0){
             $title = $row["title"];
             $condition = $row["itemCondition"];
             $description = $row["description"];
-            $price = $row["amount"]; # amount from Transaction table
             $date = $row["date"]; # date from Transaction table
+
+            # amount from Auction table
+            $final_price = $row["winningPrice"]; 
+            $reserve_price = $row["reservePrice"];
+
+            if ($final_price < $reserve_price){
+                $final_price = $reserve_price;
+            }
 
             $stat = $row["status"]; # status from Transaction table
             $seller = extract_userName($seller_id);
@@ -42,7 +49,7 @@ if ($count > 0){
                 $payer_add = mysqli_fetch_assoc($result_b)['shippingAddress'];
                 $payee_add = mysqli_fetch_assoc($result_a)['shippingAddress'];
 
-                print_transac_li($title, $condition, $description, $winner, $seller, $price, $payer_add, $payee_add, $date, $stat);
+                print_transac_li($title, $condition, $description, $winner, $seller, $final_price, $payer_add, $payee_add, $date, $stat);
             }
            
         }

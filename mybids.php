@@ -81,7 +81,7 @@ if ($result != null) {
     }else if ($winner != ''){
       $status = "Auction Ended. '$winner' won.";
     } else {
-      $status = "Outbid";
+      $status = "Outbidded";
     } 
 
     $nextSql = "SELECT * FROM Auction WHERE auctionID = '$auction_id'";
