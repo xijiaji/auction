@@ -10,7 +10,7 @@
 
 </body>
 <footer class="footer">
-        <div align="center">2023 GROUP 4 Database Project.</div>
+        <div align="center">2023 GROUP 3 Database Project.</div>
 </footer>
 
 </html>
